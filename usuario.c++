@@ -1,13 +1,13 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <fstream>
+#include <fstream> //Crear archivo
 
 using namespace std;
 
-class Usuario
+class Usuario //declaramos el usuario
 {
-private:
+private: //damos los datos que se van a pedir 
     string name;
     string lastname;
     string id;
@@ -15,11 +15,11 @@ private:
     string socialWork;
     string numberAfiliater;
 
-public:
+public: //creamos sus respectivos get y set
     void setName()
     {
         cout << "Ingrese el nombre: ";
-        cin >> name;
+        getline(cin, name);
     }
     string getName()
     {
@@ -29,7 +29,7 @@ public:
     void setLastname()
     {
         cout << "Ingrese el Apellido: ";
-        cin >> lastname;
+        getline(cin, lastname);
     }
     string getLastname()
     {
@@ -39,8 +39,7 @@ public:
     void setId()
     {
         cout << "Ingrese el DNI: ";
-        cin >> id;
-        cin.ignore();
+        getline(cin, id);
     }
     string getId()
     {
@@ -52,11 +51,11 @@ public:
         char result;
         cout << "Quiere agregar descripcion? s/n: ";
         cin >> result;
-        cin.ignore();
-            if (result == 's'){
-                cout << "Ingrese el texto: ";
-                getline(cin, text);
-            }
+        if (result == 's') //consultamos si quiere agregar una descripcion
+        {
+            cout << "Ingrese el texto: ";
+            getline(cin, text);
+        }
     }
     string getText()
     {
@@ -68,84 +67,84 @@ public:
         cout << "Ingrese el nombre de la Obra social: ";
         getline(cin, socialWork);
     }
-    string getSocialWork(){
+    string getSocialWork()
+    {
         return socialWork;
     }
 
     void setNumberAfiliater()
     {
         cout << "Ingrese el numero de afiliado: ";
-        cin >> numberAfiliater;
+        getline(cin, numberAfiliater);
     }
-    string getNumberAfiliater(){
+    string getNumberAfiliater()
+    {
         return numberAfiliater;
     }
 };
 
-ofstream Myfile("filename.txt");
-string myText;
-ifstream MyReadFile("filename.txt");
 
 int main()
 {
-    char menuBucle = 's';
-   while (menuBucle == 's')
-   {
-    int reply;
-    cout << "Menu \n";
-    cout << "1. Quieres buscar un afiliado? \n";
-    cout << "2. Agregar nuevo \n";
-    cout << "3. Salir \n";
-    cout << "Ingrese su opcion: \n";
-    cin >> reply;
-    cin.ignore();
+    ofstream Myfile("filename.txt", ios::app); // Se usa ios::app para agregar al final del archivo
+    string myText;
+    ifstream MyReadFile("filename.txt");
 
-    switch (reply)
+    vector<Usuario> usuarios; // Vector para almacenar objetos Usuario
+
+    char menuBucle = 's'; //manejo del bucle del menu
+    while (menuBucle == 's')
     {
-    case 1:
-        cout << "test caso 1 bien";
-        while (getline(MyReadFile, myText)){
-            cout << myText;
-        }
-        MyReadFile.close();
-        break;
-    case 2:{
-            Usuario test;
+        int reply;
+        cout << "Menu \n";
+        cout << "1. Quieres buscar un afiliado? \n";
+        cout << "2. Agregar nuevo \n";
+        cout << "3. Salir \n";
+        cout << "Ingrese su opcion: \n";
+        cin >> reply;
+        cin.ignore();
 
-            test.setName();
-            test.setLastname();
-            test.setId();
-            test.setText();
-            test.setSocialWork();
-            test.setNumberAfiliater();
-
-
-
-            cout << test.getName() << " " << test.getLastname() << " " << test.getId() << endl;
-            cout << test.getText() << endl;
-            cout << test.getSocialWork() << endl;
-            cout << test.getNumberAfiliater() <<endl;
-            Myfile << test.getName() +  test.getId() << endl;
-            Myfile.close();
+        switch (reply)
+        {
+        case 1:
+            while (getline(MyReadFile, myText))
+            {
+                cout << myText << "\n";
             }
+            break;
+        case 2:
+        {
+            Usuario usuario1;
+            //damos inicio a la clase y la iniciamos
+            usuario1.setName();
+            usuario1.setLastname();
+            usuario1.setId();
+            usuario1.setText();
+            usuario1.setSocialWork();
+            usuario1.setNumberAfiliater();
+            //comprobamos los datos guardados
+            usuarios.push_back(usuario1);
+            cout << usuario1.getName() << " " << usuario1.getLastname() << " " << usuario1.getId() << endl;
+            cout << usuario1.getText() << endl;
+            cout << usuario1.getSocialWork() << endl;
+            cout << usuario1.getNumberAfiliater() << endl;
+            Myfile << usuario1.getName() << "," << usuario1.getLastname() << "," << usuario1.getId() << "," << usuario1.getSocialWork() << "," << usuario1.getNumberAfiliater() << endl; //agregamos los datos
+            
+        }
         break;
-    case 3:
-        return 1;
-        break;
+        case 3:
+            Myfile.close();
+            return 1;
+            break;
 
-    default:
-        cout << "default";
-        break;
+        default:
+            cout << "default";
+            break;
+        }
 
+        cout << "\n Quiere ver el menu? s/n:  \n";
+        cin >> menuBucle;
     }
 
-
-    
-    cout <<"Quiere ver el menu? s/n:  \n";
-    cin >> menuBucle;
-
-    
-   }
-   
     return 0;
 }
