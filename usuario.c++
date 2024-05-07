@@ -115,6 +115,8 @@ int main()
             {
                 cout << myText << "\n";
             }
+            MyReadFile.close();
+            MyReadFile.open("filename.txt");
             break;
         case 2:
         {
@@ -134,7 +136,9 @@ int main()
             cout << usuario1.getNumberAfiliater() << endl;
             Myfile << usuario1.getName() << "," << usuario1.getLastname() << "," << usuario1.getId() << "," << usuario1.getSocialWork() << "," << usuario1.getNumberAfiliater() << endl; // agregamos los datos
         }
-        break;
+            MyReadFile.close();
+            MyReadFile.open("filename.txt");
+            break;
         case 3:
         {
             string searchId;
@@ -191,10 +195,10 @@ int main()
             {
                 stringstream ss(fileContents[i]);
                 string item;
-                vector<string> items;
+                vector<string> items; // Creamos donde se guardan los datos modificados
                 while (getline(ss, item, ','))
                 {
-                    items.push_back(item);
+                    items.push_back(item); // los empujamos a la lista
                 }
                 if (items.size() >= 3 && items[2] == searchId)
                 {
@@ -261,6 +265,84 @@ int main()
 
             // Abrir el archivo nuevamente para leer desde el principio
             MyReadFile.open("filename.txt");
+            break;
+        }
+        case 5:
+        {
+            string searchId;
+            cout << "Ingrese el DNI del usuario a eliminar: ";
+            getline(cin, searchId);
+
+            bool found = false;
+            vector<string> fileContents; // Vector para almacenar las líneas del archivo
+
+            // Leer el archivo y almacenar las líneas en fileContents
+            while (getline(MyReadFile, myText))
+            {
+                fileContents.push_back(myText);
+            }
+
+            // Buscar el usuario por DNI en el archivo
+            for (size_t i = 0; i < fileContents.size(); ++i)
+            {
+                stringstream ss(fileContents[i]);
+                string item;
+                vector<string> items;
+                while (getline(ss, item, ','))
+                {
+                    items.push_back(item);
+                }
+                
+                if (items.size() >= 3 && items[2] == searchId)
+                {
+                    found = true;
+                    char reply;
+                    cout << "Esta seguro de eliminar a " << items[0] << " " << items[1] << " ? s/n \n";
+                    cin >> reply;
+                    cin.ignore();
+
+                    if (reply == 's'){
+                    // Eliminar el usuario del vector
+                    fileContents.erase(fileContents.begin() + i);
+
+                    // Sobrescribir el archivo con las líneas actualizadas
+                    MyReadFile.close();
+                    ofstream MyWriteFile("filename.txt");
+                    for (const string &line : fileContents)
+                    {
+                        MyWriteFile << line << endl;
+                    }
+                    MyWriteFile.close();
+
+                    cout << "Usuario eliminado del archivo.\n";
+                    break;
+                    }
+                    
+                   
+                }
+            }
+
+            if (!found)
+            {
+                cout << "No se encontró ningún usuario con el DNI ingresado.\n";
+            }
+
+            // Buscar y eliminar el usuario del vector de usuarios
+            for (auto it = usuarios.begin(); it != usuarios.end(); ++it)
+            {
+                if (it->getId() == searchId)
+                {
+                    usuarios.erase(it);
+                    cout << "Usuario eliminado del vector de usuarios.\n";
+                    cout << reply; 
+                    break;
+                }
+            }
+
+            // Reiniciar la lectura del archivo al inicio
+            MyReadFile.clear();
+            MyReadFile.seekg(0, ios::beg);
+
             break;
         }
 
