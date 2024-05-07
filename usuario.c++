@@ -52,6 +52,7 @@ public: // creamos sus respectivos get y set
         char result;
         cout << "Quiere agregar descripcion? s/n: ";
         cin >> result;
+        cin.ignore();
         if (result == 's') // consultamos si quiere agregar una descripcion
         {
             cout << "Ingrese el texto: ";
@@ -153,7 +154,7 @@ int main()
                 if (items.size() >= 3 && items[2] == searchId)
                 {
                     found = true;
-                    cout << "Usuario encontrado:\n";
+                    cout << "Usuario encontrado\n";
                     cout << "Nombre: " << items[0] << endl;
                     cout << "Apellido: " << items[1] << endl;
                     cout << "DNI: " << items[2] << endl;
@@ -186,7 +187,7 @@ int main()
             }
 
             // Buscar el usuario por DNI
-            for (int i = 0; i < fileContents.size(); ++i)
+            for (size_t i = 0; i < fileContents.size(); ++i)
             {
                 stringstream ss(fileContents[i]);
                 string item;
@@ -199,7 +200,7 @@ int main()
                 {
                     found = true;
                     int result;
-                    cout << "Usuario encontrado:\n";
+                    cout << "Usuario encontrado " << items[0] << " " << items[1];
                     cout << "Que dato quieres modificar \n";
                     cout << "1. Nombre \n";
                     cout << "2. Apellido \n";
@@ -257,6 +258,9 @@ int main()
                 MyWriteFile << line << endl;
             }
             MyWriteFile.close();
+
+            // Abrir el archivo nuevamente para leer desde el principio
+            MyReadFile.open("filename.txt");
             break;
         }
 
