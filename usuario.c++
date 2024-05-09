@@ -334,7 +334,7 @@ int main()
                 {
                     usuarios.erase(it);
                     cout << "Usuario eliminado del vector de usuarios.\n";
-                    cout << reply; 
+                    cout << reply;
                     break;
                 }
             }
